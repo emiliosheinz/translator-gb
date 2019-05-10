@@ -1,10 +1,10 @@
 package br.com.unisinos.tranlatorgb;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public class Dicionario {
 
     protected String palavra;
-    protected LinkedList definicoes;
+    protected List<String> definicoes;
 
 }
