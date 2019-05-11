@@ -5,16 +5,18 @@ import java.util.List;
 
 public class TradutorMain {
 
-	public static void main(String[] args) {
-		
-		Tradutor tradutor = new Tradutor();
-		
-		List<String> definicoes = new ArrayList<>();
-		definicoes.add("bola");
-		definicoes.add("bolita");
-		definicoes.add("pelota");
-		
-		tradutor.insereTraducao("ball", definicoes);
-	}
+    public static void main(String[] args) {
+
+        Tradutor tradutor = new Tradutor();
+
+        tradutor.carregaDicionario("dicionario.dat");
+
+//		List<String> definicoes = new ArrayList<>();
+//		definicoes.add("bola");
+//		definicoes.add("bolita");
+//		definicoes.add("pelota");
+//
+//		tradutor.insereTraducao("ball", definicoes);
+    }
 
 }
