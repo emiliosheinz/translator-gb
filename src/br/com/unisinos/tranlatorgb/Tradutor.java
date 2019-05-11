@@ -5,17 +5,18 @@ import java.io.FileReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Tradutor {
 
     protected void carregaDicionario(String arq){
-        try (BufferedReader br = new BufferedReader(new FileReader("dicionario.dat"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(arq))) {
 
             Dicionario dicionario;
             String linha, chave = "";
-            List<String> traducoes = Collections.emptyList();
+            List<String> traducoes = new ArrayList<>();
 
             while ((linha = br.readLine()) != null) {
 
