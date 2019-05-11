@@ -25,7 +25,7 @@ public class Tradutor {
                 for (int i = 0; i < palavras.length; i++) {
                     if(i == 0) {
                         chave = palavras[i];
-                    }else {
+                    } else {
                         traducoes.add(palavras[i]);
                     }
                 }
@@ -43,7 +43,6 @@ public class Tradutor {
 	}
 
 	public void insereTraducao(String palavra, List<String> definicoes) {
-
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(palavra + "#");
@@ -57,6 +56,7 @@ public class Tradutor {
 
 		File file = new File("dicionario.dat");
 		FileWriter fr = null;
+
 		try {
 			fr = new FileWriter(file);
 			fr.write(builder.toString());
@@ -69,7 +69,6 @@ public class Tradutor {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	public void salvaDicionario(String arq) {
