@@ -40,32 +40,34 @@ public class Tradutor {
     }
 
     public void insereTraducao(String palavra, List<String> definicoes) {
+
         StringBuilder builder = new StringBuilder();
 
-        builder.append(palavra + "#");
+        builder.append(palavra)
+                .append("#");
+
         for (int i = 0; i < definicoes.size(); i++) {
             if (i == definicoes.size() - 1) {
                 builder.append(definicoes.get(i));
             } else {
-                builder.append(definicoes.get(i) + "#");
+                builder.append(definicoes.get(i))
+                        .append("#");
             }
         }
 
-        File file = new File("dicionario.dat");
-        FileWriter fr = null;
-
+        BufferedWriter writer = null;
         try {
-            fr = new FileWriter(file);
-            fr.write(builder.toString());
+            writer = new BufferedWriter(new FileWriter("dicionario.dat", true));
+
+            if (new File("dicionario.dat").length() != 0) {
+                writer.newLine();
+            }
+            writer.write(builder.toString());
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                fr.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
+
     }
 
     public void salvaDicionario(String arq) {
