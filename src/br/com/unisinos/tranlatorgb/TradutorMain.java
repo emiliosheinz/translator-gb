@@ -1,5 +1,7 @@
 package br.com.unisinos.tranlatorgb;
 
+import br.com.unisinos.tranlatorgb.arvore.Nodo;
+
 import java.util.ArrayList;
 import java.util.List;
 

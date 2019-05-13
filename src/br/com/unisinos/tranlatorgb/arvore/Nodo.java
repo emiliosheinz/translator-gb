@@ -1,17 +1,30 @@
 package br.com.unisinos.tranlatorgb.arvore;
 
+import br.com.unisinos.tranlatorgb.Dicionario;
+
+import java.util.Objects;
+
 public class Nodo {
 
-    private String chave;
+    private Dicionario chave;
     private int altura;
     private Nodo esquerda, direita;
 
-    public Nodo(String chave){
+    public Nodo(Dicionario chave){
         this.chave = chave;
         this.altura = 1;
+        this.esquerda = new Nodo();
+
     }
 
-    public String getChave() {
+    public Nodo(){
+        this.chave = null;
+        this.altura = 1;
+        this.esquerda = null;
+        this.direita = null;
+    }
+
+    public Dicionario getChave() {
         return chave;
     }
 
@@ -32,7 +45,7 @@ public class Nodo {
         this.esquerda = esquerda;
     }
 
-    public void setChave(String chave) {
+    public void setChave(Dicionario chave) {
         this.chave = chave;
     }
 

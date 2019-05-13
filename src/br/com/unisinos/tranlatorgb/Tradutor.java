@@ -1,5 +1,9 @@
 package br.com.unisinos.tranlatorgb;
 
+import br.com.unisinos.tranlatorgb.arvore.ArvoreAVL;
+import br.com.unisinos.tranlatorgb.arvore.Nodo;
+import br.com.unisinos.tranlatorgb.exceptions.NodoInvalidoException;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,9 +12,12 @@ import java.util.List;
 public class Tradutor {
 
     protected void carregaDicionario(String arq) {
+        ArvoreAVL arvoreAVL = null;
+        int count = 0;
+
         try (BufferedReader br = new BufferedReader(new FileReader(arq))) {
 
-            Dicionario dicionario;
+            Dicionario dicionario = null;
             String linha;
             List<Dicionario> palavrasDicionario = new ArrayList<>();
 
@@ -26,9 +33,20 @@ public class Tradutor {
 
                 dicionario = new Dicionario(chave, traducoes);
                 palavrasDicionario.add(dicionario);
-            }
 
-            System.out.println(palavrasDicionario);
+                Nodo novoNodo = new Nodo(dicionario);
+                if (count == 0) {
+                    arvoreAVL = new ArvoreAVL(novoNodo);
+                    count++;
+                } else {
+                    try {
+                        count++;
+                        arvoreAVL.insereNodo(novoNodo, arvoreAVL.getRaiz());
+                    } catch (NodoInvalidoException nie) {
+                        System.out.println(nie.getMessage());
+                    }
+                }
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

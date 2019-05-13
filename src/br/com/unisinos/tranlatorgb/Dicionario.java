@@ -12,4 +12,11 @@ public class Dicionario {
         this.definicoes = definicoes;
     }
 
+    public String getPalavra() {
+        return palavra;
+    }
+
+    public List<String> getDefinicoes() {
+        return definicoes;
+    }
 }
