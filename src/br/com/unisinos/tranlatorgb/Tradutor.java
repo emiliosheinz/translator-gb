@@ -1,17 +1,13 @@
 package br.com.unisinos.tranlatorgb;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Tradutor {
 
-    protected void carregaDicionario(String arq){
+    protected void carregaDicionario(String arq) {
         try (BufferedReader br = new BufferedReader(new FileReader(arq))) {
 
             Dicionario dicionario;
@@ -20,12 +16,12 @@ public class Tradutor {
 
             while ((linha = br.readLine()) != null) {
 
-                String [] palavras = linha.split("#");
+                String[] palavras = linha.split("#");
 
                 for (int i = 0; i < palavras.length; i++) {
-                    if(i == 0) {
+                    if (i == 0) {
                         chave = palavras[i];
-                    }else {
+                    } else {
                         traducoes.add(palavras[i]);
                     }
                 }
@@ -38,41 +34,42 @@ public class Tradutor {
         }
     }
 
-	public List<String> traduzPalavra(String palavra) {
-		return Collections.emptyList();
-	}
+    public List<String> traduzPalavra(String palavra) {
+        return Collections.emptyList();
+    }
 
-	public void insereTraducao(String palavra, List<String> definicoes) {
+    public void insereTraducao(String palavra, List<String> definicoes) {
 
-		StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-		builder.append(palavra + "#");
-		for (int i = 0; i < definicoes.size(); i++) {
-			if (i == definicoes.size() - 1) {
-				builder.append(definicoes.get(i));
-			} else {
-				builder.append(definicoes.get(i) + "#");
-			}
-		}
+        builder.append(palavra)
+                .append("#");
 
-		File file = new File("dicionario.dat");
-		FileWriter fr = null;
-		try {
-			fr = new FileWriter(file);
-			fr.write(builder.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				fr.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+        for (int i = 0; i < definicoes.size(); i++) {
+            if (i == definicoes.size() - 1) {
+                builder.append(definicoes.get(i));
+            } else {
+                builder.append(definicoes.get(i))
+                        .append("#");
+            }
+        }
 
-	}
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter("dicionario.dat", true));
 
-	public void salvaDicionario(String arq) {
-	}
+            if (new File("dicionario.dat").length() != 0) {
+                writer.newLine();
+            }
+            writer.write(builder.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void salvaDicionario(String arq) {
+    }
 
 }
