@@ -14,7 +14,7 @@ public class TradutorMain {
 
         ArvoreAVL arvore = tradutor.carregaDicionario("dicionario.dat");
 
-        System.out.println(arvore);
+        arvore.preOrdem(arvore.getRaiz());
 
 //		List<String> definicoes = new ArrayList<>();
 //		definicoes.add("bola");

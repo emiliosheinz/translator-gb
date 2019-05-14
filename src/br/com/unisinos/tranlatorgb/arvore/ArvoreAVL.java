@@ -24,6 +24,30 @@ public class ArvoreAVL {
         }
     }
 
+    public void preOrdem(Nodo raizDaArvore){
+        if(raizDaArvore.getChave() != null){
+            System.out.println(raizDaArvore.getChave().getPalavra());
+            preOrdem(raizDaArvore.getEsquerda());
+            preOrdem(raizDaArvore.getDireita());
+        }
+    }
+
+    public void emOrdem(Nodo raizDaArvore){
+        if(raizDaArvore.getChave() != null){
+            emOrdem(raizDaArvore.getEsquerda());
+            System.out.println(raizDaArvore.getChave().getPalavra());
+            emOrdem(raizDaArvore.getDireita());
+        }
+    }
+
+    public void posOrdem(Nodo raizDaArvore){
+        if(raizDaArvore.getChave() != null){
+            posOrdem(raizDaArvore.getEsquerda());
+            posOrdem(raizDaArvore.getDireita());
+            System.out.println(raizDaArvore.getChave().getPalavra());
+        }
+    }
+
     private void insereNodo(Nodo novoNodo, Nodo nodoAtual) throws NodoInvalidoException {
         if (Objects.isNull(novoNodo)) {
             throw new NodoInvalidoException("Nodo inválido, foi passado como parâmetro um nodo nulo.");
