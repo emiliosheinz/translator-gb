@@ -16,28 +16,44 @@ public class ArvoreAVL {
         return raiz;
     }
 
-    public void insereNodo(Nodo novoNodo, Nodo nodoAtual) throws NodoInvalidoException {
+    public void insereNodoComVerificacao(Nodo novoNodo, Nodo nodoAtual) throws NodoInvalidoException {
+        if(pesquisaValor(novoNodo.getChave().getPalavra(), nodoAtual)){
+            throw new NodoInvalidoException("Nodo inválido, esta chave ja está registrada nesta árvore.");
+        }else {
+            insereNodo(novoNodo, nodoAtual);
+        }
+    }
+
+    private void insereNodo(Nodo novoNodo, Nodo nodoAtual) throws NodoInvalidoException {
         if (Objects.isNull(novoNodo)) {
             throw new NodoInvalidoException("Nodo inválido, foi passado como parâmetro um nodo nulo.");
         } else if (Objects.isNull(novoNodo.getChave())) {
             throw new NodoInvalidoException("Nodo inválido, foi passado como parâmetro um nodo com chave vazia.");
-        } else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) == 0) {
-            throw new NodoInvalidoException("Não é possível inserir este nodo na árvoce, chave ja existe.");
-        } else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) < 0) {
-            Nodo nodoEsquerda = nodoAtual.getEsquerda();
-            if (nodoEsquerda == null) {
+        }else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) < 0) {
+            if (nodoAtual.getEsquerda().getChave() == null) {
                 nodoAtual.setEsquerda(novoNodo);
             } else {
-                insereNodo(novoNodo, nodoEsquerda);
+                insereNodo(novoNodo, nodoAtual.getEsquerda());
             }
-        } else {
-            Nodo nodoDireita = nodoAtual.getDireita();
-            if (nodoDireita == null) {
+        } else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) > 0) {
+            if (nodoAtual.getDireita().getChave() == null) {
                 nodoAtual.setDireita(novoNodo);
             } else {
-                insereNodo(novoNodo, nodoDireita);
+                insereNodo(novoNodo, nodoAtual.getDireita());
             }
         }
+    }
+
+    private boolean pesquisaValor(String valor, Nodo raizArvore) {
+        if (raizArvore.getChave() == null) return false;
+        if (raizArvore.getChave().getPalavra().compareToIgnoreCase(valor) < 0) {
+            return pesquisaValor(valor, raizArvore.getEsquerda());
+        }
+        if (raizArvore.getChave().getPalavra().compareToIgnoreCase(valor) > 0) {
+            return pesquisaValor(valor, raizArvore.getDireita());
+        }
+
+        return true;
     }
 
 }

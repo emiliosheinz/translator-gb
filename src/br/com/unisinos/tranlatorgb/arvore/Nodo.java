@@ -14,14 +14,12 @@ public class Nodo {
         this.chave = chave;
         this.altura = 1;
         this.esquerda = new Nodo();
-
+        this.direita = new Nodo();
     }
 
     public Nodo(){
         this.chave = null;
         this.altura = 1;
-        this.esquerda = null;
-        this.direita = null;
     }
 
     public Dicionario getChave() {

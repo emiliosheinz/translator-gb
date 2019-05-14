@@ -1,5 +1,6 @@
 package br.com.unisinos.tranlatorgb;
 
+import br.com.unisinos.tranlatorgb.arvore.ArvoreAVL;
 import br.com.unisinos.tranlatorgb.arvore.Nodo;
 
 import java.util.ArrayList;
@@ -11,7 +12,9 @@ public class TradutorMain {
 
         Tradutor tradutor = new Tradutor();
 
-        tradutor.carregaDicionario("dicionario.dat");
+        ArvoreAVL arvore = tradutor.carregaDicionario("dicionario.dat");
+
+        System.out.println(arvore);
 
 //		List<String> definicoes = new ArrayList<>();
 //		definicoes.add("bola");

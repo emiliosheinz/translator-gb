@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Tradutor {
 
-    protected void carregaDicionario(String arq) {
+    protected ArvoreAVL carregaDicionario(String arq) {
         ArvoreAVL arvoreAVL = null;
         int count = 0;
 
@@ -19,7 +19,6 @@ public class Tradutor {
 
             Dicionario dicionario = null;
             String linha;
-            List<Dicionario> palavrasDicionario = new ArrayList<>();
 
             while ((linha = br.readLine()) != null) {
 
@@ -32,18 +31,17 @@ public class Tradutor {
                 }
 
                 dicionario = new Dicionario(chave, traducoes);
-                palavrasDicionario.add(dicionario);
-
                 Nodo novoNodo = new Nodo(dicionario);
+
                 if (count == 0) {
                     arvoreAVL = new ArvoreAVL(novoNodo);
                     count++;
                 } else {
                     try {
                         count++;
-                        arvoreAVL.insereNodo(novoNodo, arvoreAVL.getRaiz());
+                        arvoreAVL.insereNodoComVerificacao(novoNodo, arvoreAVL.getRaiz());
                     } catch (NodoInvalidoException nie) {
-                        System.out.println(nie.getMessage());
+                        System.out.println(nie.getMensagem());
                     }
                 }
             }
@@ -51,6 +49,8 @@ public class Tradutor {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return arvoreAVL;
     }
 
     public List<String> traduzPalavra(String palavra) {
