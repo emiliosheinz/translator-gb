@@ -1,5 +1,9 @@
 package br.com.unisinos.tranlatorgb;
 
+import br.com.unisinos.tranlatorgb.arvore.ArvoreAVL;
+import br.com.unisinos.tranlatorgb.arvore.Nodo;
+import br.com.unisinos.tranlatorgb.exceptions.NodoInvalidoException;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,31 +11,46 @@ import java.util.List;
 
 public class Tradutor {
 
-    protected void carregaDicionario(String arq) {
+    protected ArvoreAVL carregaDicionario(String arq) {
+        ArvoreAVL arvoreAVL = null;
+        int count = 0;
+
         try (BufferedReader br = new BufferedReader(new FileReader(arq))) {
 
-            Dicionario dicionario;
-            String linha, chave = "";
-            List<String> traducoes = new ArrayList<>();
+            Dicionario dicionario = null;
+            String linha;
 
             while ((linha = br.readLine()) != null) {
 
+                List<String> traducoes = new ArrayList<>();
                 String[] palavras = linha.split("#");
+                String chave = palavras[0];
 
-                for (int i = 0; i < palavras.length; i++) {
-                    if (i == 0) {
-                        chave = palavras[i];
-                    } else {
-                        traducoes.add(palavras[i]);
-                    }
+                for (int i = 1; i < palavras.length; i++) {
+                    traducoes.add(palavras[i]);
                 }
 
                 dicionario = new Dicionario(chave, traducoes);
+                Nodo novoNodo = new Nodo(dicionario);
+
+                if (count == 0) {
+                    arvoreAVL = new ArvoreAVL(novoNodo);
+                    count++;
+                } else {
+                    try {
+                        count++;
+                        arvoreAVL.insereNodoComVerificacao(novoNodo, arvoreAVL.getRaiz());
+                    } catch (NodoInvalidoException nie) {
+                        System.out.println(nie.getMensagem());
+                    }
+                }
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return arvoreAVL;
     }
 
     public List<String> traduzPalavra(String palavra) {
