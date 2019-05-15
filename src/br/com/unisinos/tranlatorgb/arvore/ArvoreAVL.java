@@ -64,12 +64,14 @@ public class ArvoreAVL {
             throw new NodoInvalidoException("Nodo inválido, foi passado como parâmetro um nodo com chave vazia.");
         }else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) < 0) {
             if (nodoAtual.getEsquerda().getChave() == null) {
+                novoNodo.setAltura(nodoAtual.getAltura() + 1);
                 nodoAtual.setEsquerda(novoNodo);
             } else {
                 insereNodo(novoNodo, nodoAtual.getEsquerda());
             }
         } else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) > 0) {
             if (nodoAtual.getDireita().getChave() == null) {
+                novoNodo.setAltura(nodoAtual.getAltura() + 1);
                 nodoAtual.setDireita(novoNodo);
             } else {
                 insereNodo(novoNodo, nodoAtual.getDireita());

@@ -21,6 +21,8 @@ public class TradutorMain {
 
         System.out.println(lista);
 
+        tradutor.salvaDicionario("dicionario.dat");
+
 //		List<String> definicoes = new ArrayList<>();
 //		definicoes.add("bola");
 //		definicoes.add("bolita");
