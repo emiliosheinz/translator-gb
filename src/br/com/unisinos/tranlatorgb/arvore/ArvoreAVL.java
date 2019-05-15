@@ -25,23 +25,29 @@ public class ArvoreAVL {
     }
 
     private void insereNodo(Nodo novoNodo, Nodo nodoAtual) throws NodoInvalidoException {
+        Nodo filhoAEsquerda = nodoAtual.getEsquerda();
+        Nodo filhoADireita = nodoAtual.getDireita();
         if (Objects.isNull(novoNodo)) {
             throw new NodoInvalidoException("Nodo inválido, foi passado como parâmetro um nodo nulo.");
         } else if (Objects.isNull(novoNodo.getChave())) {
             throw new NodoInvalidoException("Nodo inválido, foi passado como parâmetro um nodo com chave vazia.");
         }else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) < 0) {
-            if (nodoAtual.getEsquerda().getChave() == null) {
+            if (filhoAEsquerda.getChave() == null) {
+                novoNodo.setAltura(nodoAtual.getAltura() + 1);
                 nodoAtual.setEsquerda(novoNodo);
             } else {
-                insereNodo(novoNodo, nodoAtual.getEsquerda());
+                insereNodo(novoNodo, filhoAEsquerda);
             }
         } else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) > 0) {
-            if (nodoAtual.getDireita().getChave() == null) {
+            if (filhoADireita.getChave() == null) {
                 nodoAtual.setDireita(novoNodo);
+                //nodoAtual.setAltura();
             } else {
                 insereNodo(novoNodo, nodoAtual.getDireita());
             }
         }
+
+
     }
 
     private boolean pesquisaValor(String valor, Nodo raizArvore) {
@@ -54,6 +60,15 @@ public class ArvoreAVL {
         }
 
         return true;
+    }
+
+    private Nodo rotacaoADireita(Nodo nd) {
+        Nodo e = nd.getEsquerda();
+        nd.setEsquerda(e.getDireita());
+        e.setDireita(nd);
+        //nd.height = Math.max(height(nd.left), height(nd.right)) + 1;
+        //e.height = Math.max(height(e.left), height(e.right)) + 1;
+        return e;
     }
 
 }

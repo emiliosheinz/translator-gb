@@ -2,23 +2,20 @@ package br.com.unisinos.tranlatorgb.arvore;
 
 import br.com.unisinos.tranlatorgb.Dicionario;
 
-import java.util.Objects;
-
 public class Nodo {
 
     private Dicionario chave;
     private int altura;
+    private int grauDeBalanceamento;
     private Nodo esquerda, direita;
 
-    public Nodo(Dicionario chave){
+    public Nodo(Dicionario chave) {
         this.chave = chave;
-        this.altura = 1;
         this.esquerda = new Nodo();
         this.direita = new Nodo();
     }
 
-    public Nodo(){
-        this.chave = null;
+    public Nodo() {
         this.altura = 1;
     }
 
