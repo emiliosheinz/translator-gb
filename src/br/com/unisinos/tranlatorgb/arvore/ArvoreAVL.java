@@ -1,7 +1,10 @@
 package br.com.unisinos.tranlatorgb.arvore;
 
+import br.com.unisinos.tranlatorgb.Dicionario;
 import br.com.unisinos.tranlatorgb.exceptions.NodoInvalidoException;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class ArvoreAVL {
@@ -24,28 +27,34 @@ public class ArvoreAVL {
         }
     }
 
-    public void preOrdem(Nodo raizDaArvore){
+    public List<Dicionario> preOrdem(Nodo raizDaArvore, List<Dicionario> ordemDeLeitura){
         if(raizDaArvore.getChave() != null){
-            System.out.println(raizDaArvore.getChave().getPalavra());
-            preOrdem(raizDaArvore.getEsquerda());
-            preOrdem(raizDaArvore.getDireita());
+            ordemDeLeitura.add(raizDaArvore.getChave());
+            preOrdem(raizDaArvore.getEsquerda(), ordemDeLeitura);
+            preOrdem(raizDaArvore.getDireita(), ordemDeLeitura);
         }
+
+        return ordemDeLeitura;
     }
 
-    public void emOrdem(Nodo raizDaArvore){
+    public List<Dicionario> emOrdem(Nodo raizDaArvore, List<Dicionario> ordemDeLeitura){
         if(raizDaArvore.getChave() != null){
-            emOrdem(raizDaArvore.getEsquerda());
-            System.out.println(raizDaArvore.getChave().getPalavra());
-            emOrdem(raizDaArvore.getDireita());
+            emOrdem(raizDaArvore.getEsquerda(), ordemDeLeitura);
+            ordemDeLeitura.add(raizDaArvore.getChave());
+            emOrdem(raizDaArvore.getDireita(), ordemDeLeitura);
         }
+
+        return ordemDeLeitura;
     }
 
-    public void posOrdem(Nodo raizDaArvore){
+    public List<Dicionario> posOrdem(Nodo raizDaArvore, List<Dicionario> ordemDeLeitura){
         if(raizDaArvore.getChave() != null){
-            posOrdem(raizDaArvore.getEsquerda());
-            posOrdem(raizDaArvore.getDireita());
-            System.out.println(raizDaArvore.getChave().getPalavra());
+            posOrdem(raizDaArvore.getEsquerda(), ordemDeLeitura);
+            posOrdem(raizDaArvore.getDireita(), ordemDeLeitura);
+            ordemDeLeitura.add(raizDaArvore.getChave());
         }
+
+        return ordemDeLeitura;
     }
 
     private void insereNodo(Nodo novoNodo, Nodo nodoAtual) throws NodoInvalidoException {

@@ -5,14 +5,17 @@ import br.com.unisinos.tranlatorgb.arvore.Nodo;
 import br.com.unisinos.tranlatorgb.exceptions.NodoInvalidoException;
 
 import java.io.*;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Tradutor {
 
+    ArvoreAVL arvoreAVL;
+
     protected ArvoreAVL carregaDicionario(String arq) {
-        ArvoreAVL arvoreAVL = null;
+        arvoreAVL = null;
         int count = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(arq))) {
@@ -88,7 +91,8 @@ public class Tradutor {
 
     }
 
-    public void salvaDicionario(String arq) {
+    public void salvaDicionario(String arq, Method leituraDaArvore) {
+        
     }
 
 }
