@@ -5,14 +5,18 @@ import br.com.unisinos.tranlatorgb.arvore.Nodo;
 import br.com.unisinos.tranlatorgb.exceptions.NodoInvalidoException;
 
 import java.io.*;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Tradutor {
 
+    ArvoreAVL arvoreAVL;
+
     protected ArvoreAVL carregaDicionario(String arq) {
-        ArvoreAVL arvoreAVL = null;
+        arvoreAVL = null;
         int count = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(arq))) {
@@ -57,7 +61,7 @@ public class Tradutor {
         return Collections.emptyList();
     }
 
-    public void insereTraducao(String palavra, List<String> definicoes) {
+    public void insereTraducao(String palavra, List<String> definicoes, boolean append) {
 
         StringBuilder builder = new StringBuilder();
 
@@ -75,7 +79,7 @@ public class Tradutor {
 
         BufferedWriter writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter("dicionario.dat", true));
+            writer = new BufferedWriter(new FileWriter("dicionario.dat", append));
 
             if (new File("dicionario.dat").length() != 0) {
                 writer.newLine();
@@ -89,6 +93,15 @@ public class Tradutor {
     }
 
     public void salvaDicionario(String arq) {
+        List<Dicionario> lista = arvoreAVL.emOrdem(arvoreAVL.getRaiz(), new LinkedList<>());
+
+        for (int i = 0; i < lista.size(); i++) {
+            Dicionario dicionario = lista.get(i);
+            boolean append = i == 0;
+
+            insereTraducao(dicionario.palavra, dicionario.getDefinicoes(), !append);
+        }
+
     }
 
 }
