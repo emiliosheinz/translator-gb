@@ -40,8 +40,8 @@ public class ArvoreAVL {
             }
         } else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) > 0) {
             if (filhoADireita.getChave() == null) {
+                novoNodo.setAltura(nodoAtual.getAltura() + 1);
                 nodoAtual.setDireita(novoNodo);
-                //nodoAtual.setAltura();
             } else {
                 insereNodo(novoNodo, nodoAtual.getDireita());
             }

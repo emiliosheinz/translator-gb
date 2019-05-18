@@ -6,7 +6,6 @@ public class Nodo {
 
     private Dicionario chave;
     private int altura;
-    private int grauDeBalanceamento;
     private Nodo esquerda, direita;
 
     public Nodo(Dicionario chave) {
