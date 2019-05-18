@@ -14,9 +14,7 @@ public class Nodo {
         this.direita = new Nodo();
     }
 
-    public Nodo() {
-        this.altura = 1;
-    }
+    public Nodo() { }
 
     public Dicionario getChave() {
         return chave;
