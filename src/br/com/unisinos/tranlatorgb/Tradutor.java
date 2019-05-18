@@ -2,6 +2,7 @@ package br.com.unisinos.tranlatorgb;
 
 import br.com.unisinos.tranlatorgb.arvore.ArvoreAVL;
 import br.com.unisinos.tranlatorgb.arvore.Nodo;
+import br.com.unisinos.tranlatorgb.enums.OrdemDeLeituraArvore;
 import br.com.unisinos.tranlatorgb.exceptions.NodoInvalidoException;
 import br.com.unisinos.tranlatorgb.exceptions.PalavraNaoEncontradaException;
 
@@ -81,8 +82,17 @@ public class Tradutor {
 
     }
 
-    public void salvaDicionario(String arq) {
-        List<Dicionario> lista = arvoreAVL.emOrdem(arvoreAVL.getRaiz(), new LinkedList<>());
+    public void salvaDicionario(String arq, OrdemDeLeituraArvore ordem) {
+
+        List<Dicionario> lista = new LinkedList<>();
+
+        if(ordem == OrdemDeLeituraArvore.EM_ORDERM){
+            lista = arvoreAVL.emOrdem(arvoreAVL.getRaiz(), new LinkedList<>());
+        } else if(ordem == OrdemDeLeituraArvore.POS_ORDEM){
+            lista = arvoreAVL.posOrdem(arvoreAVL.getRaiz(), new LinkedList<>());
+        }else if(ordem == OrdemDeLeituraArvore.PRE_ORDERM){
+            lista = arvoreAVL.preOrdem(arvoreAVL.getRaiz(), new LinkedList<>());
+        }
 
         for (int i = 0; i < lista.size(); i++) {
             Dicionario dicionario = lista.get(i);
