@@ -19,4 +19,8 @@ public class Dicionario {
     public List<String> getDefinicoes() {
         return definicoes;
     }
+
+    public void setDefinicoes(List<String> definicoes) {
+        this.definicoes = definicoes;
+    }
 }
