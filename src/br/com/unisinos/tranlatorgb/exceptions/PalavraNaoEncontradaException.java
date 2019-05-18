@@ -1,10 +1,10 @@
 package br.com.unisinos.tranlatorgb.exceptions;
 
-public class NodoInvalidoException extends Exception {
+public class PalavraNaoEncontradaException extends Exception {
 
     private String mensagem;
 
-    public NodoInvalidoException(String mensagem){
+    public PalavraNaoEncontradaException(String mensagem){
         this.mensagem = mensagem;
     }
 

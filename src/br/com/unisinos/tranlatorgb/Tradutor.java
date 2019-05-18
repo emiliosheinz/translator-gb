@@ -3,13 +3,11 @@ package br.com.unisinos.tranlatorgb;
 import br.com.unisinos.tranlatorgb.arvore.ArvoreAVL;
 import br.com.unisinos.tranlatorgb.arvore.Nodo;
 import br.com.unisinos.tranlatorgb.exceptions.NodoInvalidoException;
+import br.com.unisinos.tranlatorgb.exceptions.PalavraNaoEncontradaException;
 
 import java.io.*;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Tradutor {
 
@@ -57,8 +55,13 @@ public class Tradutor {
         return arvoreAVL;
     }
 
-    public List<String> traduzPalavra(String palavra) {
-        return Collections.emptyList();
+    public List<String> traduzPalavra(String palavra) throws PalavraNaoEncontradaException {
+        Nodo nodo = arvoreAVL.pesquisaValor(palavra, arvoreAVL.getRaiz());
+        if(Objects.isNull(nodo)) {
+            throw new PalavraNaoEncontradaException("A palavra '" + palavra + "' não está no nosso dicionário.");
+        }
+
+        return nodo.getChave().getDefinicoes();
     }
 
     public void insereTraducao(String palavra, List<String> definicoes, boolean append) {
