@@ -4,7 +4,7 @@ public class NodoInvalidoException extends Exception {
 
     private String mensagem;
 
-    public NodoInvalidoException(String mensagem){
+    public NodoInvalidoException(String mensagem) {
         this.mensagem = mensagem;
     }
 

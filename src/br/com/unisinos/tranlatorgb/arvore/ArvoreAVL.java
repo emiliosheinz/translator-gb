@@ -19,10 +19,24 @@ public class ArvoreAVL {
     }
 
     public void insereNodoComVerificacao(Nodo novoNodo, Nodo nodoAtual) throws NodoInvalidoException {
-        if (Objects.nonNull(pesquisaValor(novoNodo.getChave().getPalavra(), nodoAtual))) {
-            throw new NodoInvalidoException("Nodo inválido, a chave '" + novoNodo.getChave().getPalavra() + "' ja está registrada nesta árvore.");
+        Nodo nodo = pesquisaValor(novoNodo.getChave().getPalavra(), nodoAtual);
+
+        if (Objects.nonNull(nodo)) {
+            List<String> traducoesExistente = nodo.getChave().getDefinicoes();
+            List<String> novasTraducoes = novoNodo.getChave().getDefinicoes();
+            List<String> futurasTraducoes = traducoesExistente;
+
+            for (int i = 0; i < novasTraducoes.size(); i++) {
+                if (!traducoesExistente.contains(novasTraducoes.get(i))) {
+                    futurasTraducoes.add(novasTraducoes.get(i));
+                }
+            }
+
+            novoNodo.getChave().setDefinicoes(futurasTraducoes);
+
+            insereNodo(novoNodo, nodoAtual, true);
         } else {
-            insereNodo(novoNodo, nodoAtual);
+            insereNodo(novoNodo, nodoAtual, false);
         }
     }
 
@@ -56,27 +70,31 @@ public class ArvoreAVL {
         return ordemDeLeitura;
     }
 
-    private void insereNodo(Nodo novoNodo, Nodo nodoAtual) throws NodoInvalidoException {
-        Nodo filhoAEsquerda = nodoAtual.getEsquerda();
-        Nodo filhoADireita = nodoAtual.getDireita();
+    private void insereNodo(Nodo novoNodo, Nodo nodoAtual, boolean atualizacao) throws NodoInvalidoException {
         if (Objects.isNull(novoNodo)) {
             throw new NodoInvalidoException("Nodo inválido, foi passado como parâmetro um nodo nulo.");
         } else if (Objects.isNull(novoNodo.getChave())) {
             throw new NodoInvalidoException("Nodo inválido, foi passado como parâmetro um nodo com chave vazia.");
         } else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) < 0) {
+            if (!atualizacao) {
+                nodoAtual.setBalanceamento(nodoAtual.getBalanceamento() + 1);
+            }
             if (nodoAtual.getEsquerda().getChave() == null) {
-                novoNodo.setAltura(nodoAtual.getAltura() + 1);
                 nodoAtual.setEsquerda(novoNodo);
             } else {
-                insereNodo(novoNodo, filhoAEsquerda);
+                insereNodo(novoNodo, nodoAtual.getEsquerda(), atualizacao);
             }
         } else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) > 0) {
+            if (!atualizacao) {
+                nodoAtual.setBalanceamento(nodoAtual.getBalanceamento() - 1);
+            }
             if (nodoAtual.getDireita().getChave() == null) {
-                novoNodo.setAltura(nodoAtual.getAltura() + 1);
                 nodoAtual.setDireita(novoNodo);
             } else {
-                insereNodo(novoNodo, nodoAtual.getDireita());
+                insereNodo(novoNodo, nodoAtual.getDireita(), atualizacao);
             }
+        } else {
+            nodoAtual.setChave(novoNodo.getChave());
         }
 
 

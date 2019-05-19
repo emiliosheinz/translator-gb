@@ -2,12 +2,15 @@ package br.com.unisinos.tranlatorgb;
 
 import br.com.unisinos.tranlatorgb.arvore.ArvoreAVL;
 import br.com.unisinos.tranlatorgb.arvore.Nodo;
+import br.com.unisinos.tranlatorgb.enums.OrdemDeLeituraArvore;
 import br.com.unisinos.tranlatorgb.exceptions.NodoInvalidoException;
 import br.com.unisinos.tranlatorgb.exceptions.PalavraNaoEncontradaException;
 
 import java.io.*;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 public class Tradutor {
 
@@ -57,14 +60,50 @@ public class Tradutor {
 
     public List<String> traduzPalavra(String palavra) throws PalavraNaoEncontradaException {
         Nodo nodo = arvoreAVL.pesquisaValor(palavra, arvoreAVL.getRaiz());
-        if(Objects.isNull(nodo)) {
+        if (Objects.isNull(nodo)) {
             throw new PalavraNaoEncontradaException("A palavra '" + palavra + "' não está no nosso dicionário.");
         }
 
         return nodo.getChave().getDefinicoes();
     }
 
-    public void insereTraducao(String palavra, List<String> definicoes, boolean append) {
+    public ArvoreAVL insereTraducao(String palavra, List<String> definicoes) {
+
+        Dicionario chave = new Dicionario(palavra, definicoes);
+        Nodo nodo = new Nodo(chave);
+
+        try {
+            arvoreAVL.insereNodoComVerificacao(nodo, arvoreAVL.getRaiz());
+        } catch (NodoInvalidoException nie) {
+            System.out.println(nie.getMensagem());
+        }
+
+        return arvoreAVL;
+
+    }
+
+    public void salvaDicionario(String arq, OrdemDeLeituraArvore ordem) {
+
+        List<Dicionario> lista = new LinkedList<>();
+
+        if(ordem == OrdemDeLeituraArvore.EM_ORDERM){
+            lista = arvoreAVL.emOrdem(arvoreAVL.getRaiz(), new LinkedList<>());
+        } else if(ordem == OrdemDeLeituraArvore.POS_ORDEM){
+            lista = arvoreAVL.posOrdem(arvoreAVL.getRaiz(), new LinkedList<>());
+        }else if(ordem == OrdemDeLeituraArvore.PRE_ORDERM){
+            lista = arvoreAVL.preOrdem(arvoreAVL.getRaiz(), new LinkedList<>());
+        }
+
+        for (int i = 0; i < lista.size(); i++) {
+            Dicionario dicionario = lista.get(i);
+            boolean append = i == 0;
+
+            escreveNoArquivo(dicionario.palavra, dicionario.getDefinicoes(), !append);
+        }
+
+    }
+
+    private void escreveNoArquivo(String palavra, List<String> definicoes, boolean append) {
 
         StringBuilder builder = new StringBuilder();
 
@@ -92,19 +131,6 @@ public class Tradutor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }
-
-    public void salvaDicionario(String arq) {
-        List<Dicionario> lista = arvoreAVL.emOrdem(arvoreAVL.getRaiz(), new LinkedList<>());
-
-        for (int i = 0; i < lista.size(); i++) {
-            Dicionario dicionario = lista.get(i);
-            boolean append = i == 0;
-
-            insereTraducao(dicionario.palavra, dicionario.getDefinicoes(), !append);
-        }
-
     }
 
 }

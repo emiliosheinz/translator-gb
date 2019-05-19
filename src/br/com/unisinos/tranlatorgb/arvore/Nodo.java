@@ -5,24 +5,26 @@ import br.com.unisinos.tranlatorgb.Dicionario;
 public class Nodo {
 
     private Dicionario chave;
-    private int altura;
+    private int balanceamento;
     private Nodo esquerda, direita;
 
     public Nodo(Dicionario chave) {
         this.chave = chave;
+        this.balanceamento = 0;
         this.esquerda = new Nodo();
         this.direita = new Nodo();
     }
 
-    public Nodo() { }
+    public Nodo() {
+    }
 
     public Dicionario getChave() {
         return chave;
     }
 
 
-    public int getAltura() {
-        return altura;
+    public int getBalanceamento() {
+        return balanceamento;
     }
 
     public Nodo getEsquerda() {
@@ -41,8 +43,8 @@ public class Nodo {
         this.chave = chave;
     }
 
-    public void setAltura(int altura) {
-        this.altura = altura;
+    public void setBalanceamento(int balanceamento) {
+        this.balanceamento = balanceamento;
     }
 
     public void setDireita(Nodo direita) {

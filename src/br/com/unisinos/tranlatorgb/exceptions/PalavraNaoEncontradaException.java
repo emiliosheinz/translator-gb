@@ -4,7 +4,7 @@ public class PalavraNaoEncontradaException extends Exception {
 
     private String mensagem;
 
-    public PalavraNaoEncontradaException(String mensagem){
+    public PalavraNaoEncontradaException(String mensagem) {
         this.mensagem = mensagem;
     }
 
