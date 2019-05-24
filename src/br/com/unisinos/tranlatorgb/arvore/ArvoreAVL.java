@@ -1,16 +1,20 @@
 package br.com.unisinos.tranlatorgb.arvore;
 
 import br.com.unisinos.tranlatorgb.Dicionario;
-import br.com.unisinos.tranlatorgb.exceptions.NodoInvalidoException;
+import br.com.unisinos.tranlatorgb.exceptions.ChaveInvalidaException;
 
 import java.util.List;
 import java.util.Objects;
 
 public class ArvoreAVL {
 
-    Nodo raiz;
+    private Nodo raiz;
 
     public ArvoreAVL(Nodo raiz) {
+        this.raiz = raiz;
+    }
+
+    public void setRaiz(Nodo raiz) {
         this.raiz = raiz;
     }
 
@@ -18,96 +22,198 @@ public class ArvoreAVL {
         return raiz;
     }
 
-    public void insereNodoComVerificacao(Nodo novoNodo, Nodo nodoAtual) throws NodoInvalidoException {
-        Nodo nodo = pesquisaValor(novoNodo.getChave().getPalavra(), nodoAtual);
+    /**
+     * Verifica se a chave a ser inserida já existe, caso exista apenas insere novas definições.
+     * caso não, insere a nova chave.
+     *
+     * @param chave Chave a ser inserida
+     * @param raiz Raiz da árvore
+     * @return Retorna nodo inserido ou achado na pesquisa
+     * @throws ChaveInvalidaException Lançado quando a chave inserida é nula
+     */
+    public Nodo insereNodoComVerificacao(Dicionario chave, Nodo raiz) throws ChaveInvalidaException {
+        Nodo nodo;
+        if(Objects.isNull(chave)) {
+            throw new ChaveInvalidaException("Chave inválida. A chave passada é nula!");
+        }
+        nodo = pesquisaValor(chave.getPalavra(), raiz);
 
         if (Objects.nonNull(nodo)) {
             List<String> traducoesExistente = nodo.getChave().getDefinicoes();
-            List<String> novasTraducoes = novoNodo.getChave().getDefinicoes();
-            List<String> futurasTraducoes = traducoesExistente;
 
-            for (int i = 0; i < novasTraducoes.size(); i++) {
-                if (!traducoesExistente.contains(novasTraducoes.get(i))) {
-                    futurasTraducoes.add(novasTraducoes.get(i));
+            for (String novaTraducao : chave.getDefinicoes()) {
+                if (!traducoesExistente.contains(novaTraducao)) {
+                    traducoesExistente.add(novaTraducao);
                 }
             }
-
-            novoNodo.getChave().setDefinicoes(futurasTraducoes);
-
-            insereNodo(novoNodo, nodoAtual, true);
         } else {
-            insereNodo(novoNodo, nodoAtual, false);
+            return insereNodo(raiz, chave);
         }
+        return nodo;
     }
 
-    public List<Dicionario> preOrdem(Nodo raizDaArvore, List<Dicionario> ordemDeLeitura) {
-        if (raizDaArvore.getChave() != null) {
-            ordemDeLeitura.add(raizDaArvore.getChave());
-            preOrdem(raizDaArvore.getEsquerda(), ordemDeLeitura);
-            preOrdem(raizDaArvore.getDireita(), ordemDeLeitura);
+    /**
+     * Percorre a árvore em pré ordem e retorna o seu percurso.
+     * @param raizDaArvore Raiz da árvore a ser percorrida
+     * @param percursoAtual Lista dos elementos percorridos até o momento
+     * @return Retorna o percurso final
+     */
+    public List<Dicionario> preOrdem(Nodo raizDaArvore, List<Dicionario> percursoAtual) {
+        if (Objects.nonNull(raizDaArvore)) {
+            percursoAtual.add(raizDaArvore.getChave());
+            preOrdem(raizDaArvore.getEsquerda(), percursoAtual);
+            preOrdem(raizDaArvore.getDireita(), percursoAtual);
         }
 
-        return ordemDeLeitura;
+        return percursoAtual;
     }
 
-    public List<Dicionario> emOrdem(Nodo raizDaArvore, List<Dicionario> ordemDeLeitura) {
-        if (raizDaArvore.getChave() != null) {
-            emOrdem(raizDaArvore.getEsquerda(), ordemDeLeitura);
-            ordemDeLeitura.add(raizDaArvore.getChave());
-            emOrdem(raizDaArvore.getDireita(), ordemDeLeitura);
+    /**
+     * Percorre a árvore em ordem e retorna o seu percurso.
+     * @param raizDaArvore Raiz da árvore a ser percorrida
+     * @param percursoAtual Lista dos elementos percorridos até o momento
+     * @return Retorna o percurso final
+     */
+    public List<Dicionario> emOrdem(Nodo raizDaArvore, List<Dicionario> percursoAtual) {
+        if (Objects.nonNull(raizDaArvore)) {
+            emOrdem(raizDaArvore.getEsquerda(), percursoAtual);
+            percursoAtual.add(raizDaArvore.getChave());
+            emOrdem(raizDaArvore.getDireita(), percursoAtual);
         }
 
-        return ordemDeLeitura;
+        return percursoAtual;
     }
 
-    public List<Dicionario> posOrdem(Nodo raizDaArvore, List<Dicionario> ordemDeLeitura) {
-        if (raizDaArvore.getChave() != null) {
-            posOrdem(raizDaArvore.getEsquerda(), ordemDeLeitura);
-            posOrdem(raizDaArvore.getDireita(), ordemDeLeitura);
-            ordemDeLeitura.add(raizDaArvore.getChave());
+    /**
+     * Percorre a árvore em pós ordem e retorna o seu percurso.
+     * @param raizDaArvore Raiz da árvore a ser percorrida
+     * @param percursoAtual Lista dos elementos percorridos até o momento
+     * @return Retorna o percurso final
+     */
+    public List<Dicionario> posOrdem(Nodo raizDaArvore, List<Dicionario> percursoAtual) {
+        if (Objects.nonNull(raizDaArvore)) {
+            posOrdem(raizDaArvore.getEsquerda(), percursoAtual);
+            posOrdem(raizDaArvore.getDireita(), percursoAtual);
+            percursoAtual.add(raizDaArvore.getChave());
         }
 
-        return ordemDeLeitura;
+        return percursoAtual;
     }
 
-    private void insereNodo(Nodo novoNodo, Nodo nodoAtual, boolean atualizacao) throws NodoInvalidoException {
-        if (Objects.isNull(novoNodo)) {
-            throw new NodoInvalidoException("Nodo inválido, foi passado como parâmetro um nodo nulo.");
-        } else if (Objects.isNull(novoNodo.getChave())) {
-            throw new NodoInvalidoException("Nodo inválido, foi passado como parâmetro um nodo com chave vazia.");
-        } else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) < 0) {
-            if (!atualizacao) {
-                nodoAtual.setBalanceamento(nodoAtual.getBalanceamento() + 1);
-            }
-            if (nodoAtual.getEsquerda().getChave() == null) {
-                nodoAtual.setEsquerda(novoNodo);
-            } else {
-                insereNodo(novoNodo, nodoAtual.getEsquerda(), atualizacao);
-            }
-        } else if (novoNodo.getChave().getPalavra().compareToIgnoreCase(nodoAtual.getChave().getPalavra()) > 0) {
-            if (!atualizacao) {
-                nodoAtual.setBalanceamento(nodoAtual.getBalanceamento() - 1);
-            }
-            if (nodoAtual.getDireita().getChave() == null) {
-                nodoAtual.setDireita(novoNodo);
-            } else {
-                insereNodo(novoNodo, nodoAtual.getDireita(), atualizacao);
-            }
+    /**
+     * Insere uma nova chave na árvore
+     * @param nodoAtual Nodo atual da recursão
+     * @param chave Chave a ser inserida
+     * @return Retorna nodo inserido
+     */
+    private Nodo insereNodo(Nodo nodoAtual, Dicionario chave) {
+        if (Objects.isNull(nodoAtual)) {
+            return new Nodo(chave);
+        }
+        String novaChavePalavra = chave.getPalavra();
+        String nodoAtualChavePalavra = nodoAtual.getChave().getPalavra();
+
+        if (novaChavePalavra.compareToIgnoreCase(nodoAtualChavePalavra) < 0) {
+            nodoAtual.setEsquerda(insereNodo(nodoAtual.getEsquerda(), chave));
+        } else if (novaChavePalavra.compareToIgnoreCase(nodoAtualChavePalavra) > 0) {
+            nodoAtual.setDireita(insereNodo(nodoAtual.getDireita(), chave));
         } else {
-            nodoAtual.setChave(novoNodo.getChave());
+            return nodoAtual;
         }
+
+        nodoAtual.setAltura(1 + Math.max(getAlturaArvore(nodoAtual.getEsquerda()), getAlturaArvore(nodoAtual.getDireita())));
+
+        return verificaBalanceamento(nodoAtual, novaChavePalavra);
     }
 
-    public Nodo pesquisaValor(String valor, Nodo raizArvore) {
-        if (Objects.isNull(raizArvore.getChave())) return null;
-        if (raizArvore.getChave().getPalavra().compareToIgnoreCase(valor) > 0) {
-            return pesquisaValor(valor, raizArvore.getEsquerda());
+    /**
+     * Verifica o balanceamento, caso esteja desbalanceado, reequilibra a árvore
+     * @param nodoAtual Nodo atual da recursão
+     * @param novaChavePalavra Nova palavra a ser inserida
+     * @return Retorna o nodo balanceado
+     */
+    private Nodo verificaBalanceamento(Nodo nodoAtual, String novaChavePalavra) {
+        int balanceamento = Objects.isNull(nodoAtual) ? 0 : getAlturaArvore(nodoAtual.getEsquerda()) - getAlturaArvore(nodoAtual.getDireita());
+
+        String palavraAEsquerdaDoNodoAtual = Objects.isNull(nodoAtual.getEsquerda()) ? "" : nodoAtual.getEsquerda().getChave().getPalavra();
+        String palavraADireitaDoNodoAtual = Objects.isNull(nodoAtual.getDireita()) ? "" : nodoAtual.getDireita().getChave().getPalavra();
+
+        if (balanceamento > 1 && novaChavePalavra.compareToIgnoreCase(palavraAEsquerdaDoNodoAtual) < 0) {
+            return rotacaoADireita(nodoAtual);
+        } else if (balanceamento < -1 && novaChavePalavra.compareToIgnoreCase(palavraADireitaDoNodoAtual) > 0) {
+            return rotacaoAEsquerda(nodoAtual);
+        } else if (balanceamento > 1 && novaChavePalavra.compareToIgnoreCase(palavraAEsquerdaDoNodoAtual) > 0) {
+            nodoAtual.setEsquerda(rotacaoAEsquerda(nodoAtual.getEsquerda()));
+            return rotacaoADireita(nodoAtual);
+        } else if (balanceamento < -1 && novaChavePalavra.compareToIgnoreCase(palavraADireitaDoNodoAtual) < 0) {
+            nodoAtual.setDireita(rotacaoADireita(nodoAtual.getDireita()));
+            return rotacaoAEsquerda(nodoAtual);
         }
-        if (raizArvore.getChave().getPalavra().compareToIgnoreCase(valor) < 0) {
-            return pesquisaValor(valor, raizArvore.getDireita());
+
+        return nodoAtual;
+    }
+
+    /**
+     * Verifica a altura do nodo
+     * @param nodo Nodo a ser verificada a altura
+     * @return Retorna altura do nodo
+     */
+    private int getAlturaArvore(Nodo nodo) {
+        return Objects.isNull(nodo) ? 0 : nodo.getAltura();
+    }
+
+    /**
+     * Pesquisa valor passado pelo parâmetro chave
+     * @param chave Valor a ser pesquisado
+     * @param raizArvore Raiz da árvore
+     * @return Retorna o nodo encontrado ou null caso não encontre
+     */
+    public Nodo pesquisaValor(String chave, Nodo raizArvore) {
+        if (Objects.isNull(raizArvore)) return null;
+        if (raizArvore.getChave().getPalavra().compareToIgnoreCase(chave) > 0) {
+            return pesquisaValor(chave, raizArvore.getEsquerda());
+        }
+        if (raizArvore.getChave().getPalavra().compareToIgnoreCase(chave) < 0) {
+            return pesquisaValor(chave, raizArvore.getDireita());
         }
 
         return raizArvore;
+    }
+
+    /**
+     * Rotaciona à direita
+     * @param nodoDesbalanceado Nodo desbalanceado
+     * @return Retorna o nodo rotacionado para o lugar do nodo desbalanceado
+     */
+    private Nodo rotacaoADireita(Nodo nodoDesbalanceado) {
+        Nodo nodoDesbalanceadoEsquerda = nodoDesbalanceado.getEsquerda();
+        Nodo maiorFilhoAEsquerdaDoNodoDesbalanceado = nodoDesbalanceadoEsquerda.getDireita();
+
+        nodoDesbalanceadoEsquerda.setDireita(nodoDesbalanceado);
+        nodoDesbalanceado.setEsquerda(maiorFilhoAEsquerdaDoNodoDesbalanceado);
+
+        nodoDesbalanceado.setAltura(Math.max(getAlturaArvore(nodoDesbalanceado.getEsquerda()), getAlturaArvore(nodoDesbalanceado.getDireita())) + 1);
+        nodoDesbalanceadoEsquerda.setAltura(Math.max(getAlturaArvore(nodoDesbalanceadoEsquerda.getEsquerda()), getAlturaArvore(nodoDesbalanceadoEsquerda.getDireita())) + 1);
+
+        return nodoDesbalanceadoEsquerda;
+    }
+
+    /**
+     * Rotaciona à esquerda
+     * @param nodoDesbalanceado Nodo desbalanceado
+     * @return Retorna o nodo rotacionado para o lugar do nodo desbalanceado
+     */
+    private Nodo rotacaoAEsquerda(Nodo nodoDesbalanceado) {
+        Nodo nodoDesbalanceadoDireita = nodoDesbalanceado.getDireita();
+        Nodo menorFilhoADireitaDoNodoDesbalanceado = nodoDesbalanceadoDireita.getEsquerda();
+
+        nodoDesbalanceadoDireita.setEsquerda(nodoDesbalanceado);
+        nodoDesbalanceado.setDireita(menorFilhoADireitaDoNodoDesbalanceado);
+
+        nodoDesbalanceado.setAltura(Math.max(getAlturaArvore(nodoDesbalanceado.getEsquerda()), getAlturaArvore(nodoDesbalanceado.getDireita())) + 1);
+        nodoDesbalanceadoDireita.setAltura(Math.max(getAlturaArvore(nodoDesbalanceadoDireita.getEsquerda()), getAlturaArvore(nodoDesbalanceadoDireita.getDireita())) + 1);
+
+        return nodoDesbalanceadoDireita;
     }
 
 }

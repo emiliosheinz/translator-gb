@@ -20,7 +20,4 @@ public class Dicionario {
         return definicoes;
     }
 
-    public void setDefinicoes(List<String> definicoes) {
-        this.definicoes = definicoes;
-    }
 }
