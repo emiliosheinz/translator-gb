@@ -6,5 +6,5 @@ Unisinos lessons code that uses a AVL tree to translate words that you insert in
 - AVL Tree structure
 
 # :man: Contributors
-- @emilioheinz
-- @fumegalli
+- [@emilioheinz](https://github.com/emiliosheinz)
+- [@fumegalli](https://github.com/fumegalli)
